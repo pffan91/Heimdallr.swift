@@ -137,8 +137,18 @@ public let HeimdallrErrorNotAuthorized = 2
         }
 
         request.httpMethod = "POST"
-        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-        request.setHTTPBody(parameters: parameters as [String: AnyObject])
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        let jsonData: Data?
+        do {
+            jsonData = try JSONSerialization.data(withJSONObject: parameters, options: [])
+        } catch let error as NSError {
+            completion(.failure(error))
+            return
+        } catch let error {
+            debugPrint(error)
+            return
+        }
+        request.httpBody = jsonData
 
         httpClient.sendRequest(request) { data, response, error in
             if let error = error {
