@@ -13,7 +13,7 @@ public class OAuthClientCredentials: NSObject {
     ///
     /// Includes the client identifier as `client_id` and the client secret,
     /// if set, as `client_secret`.
-    public var parameters: [String: String] {
+    public var parameters: [String: Any] {
         var parameters = ["client_id": id]
 
         if let secret = secret {

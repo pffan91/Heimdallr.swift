@@ -110,7 +110,7 @@ public let HeimdallrErrorNotAuthorized = 2
     /// - parameter grantType: The grant type URI of the extension grant
     /// - parameter parameters: The required parameters for the external grant
     /// - parameter completion: A callback to invoke when the request completed.
-    open func requestAccessToken(grantType: String, parameters: [String: String], completion: @escaping (Result<Void, NSError>) -> Void) {
+    open func requestAccessToken(grantType: String, parameters: [String: Any], completion: @escaping (Result<Void, NSError>) -> Void) {
         requestAccessToken(grant: .extension(grantType, parameters)) { result in
             completion(result.map { _ in return })
         }
