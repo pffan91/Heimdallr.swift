@@ -79,14 +79,10 @@ public extension OAuthError {
 
 extension OAuthError {
     public class func decode(_ json: [String: AnyObject]) -> OAuthError? {
-        guard let code = json["error"].flatMap(OAuthErrorCode.decode) else {
+        guard let messageG = json["message"] as? String else {
             return nil
         }
-
-        let description = json["error_description"] as? String
-        let uri = json["error_uri"] as? String
-
-        return OAuthError(code: code, description: description, uri: uri)
+        return OAuthError(code: .InvalidRequest, description: messageG, uri: "")
     }
 
     public class func decode(data: Data) -> OAuthError? {
