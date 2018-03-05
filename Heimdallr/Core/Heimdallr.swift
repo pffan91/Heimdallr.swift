@@ -148,10 +148,18 @@ public let HeimdallrErrorNotAuthorized = 2
                     self.accessToken = accessToken
                     completion(.success(accessToken))
                 } else {
-                    let userInfo = [
-                        NSLocalizedDescriptionKey: NSLocalizedString("Could not authorize grant", comment: ""),
-                        NSLocalizedFailureReasonErrorKey: String(format: NSLocalizedString("Expected access token, got: %@.", comment: ""), NSString(data: data!, encoding: String.Encoding.utf8.rawValue) ?? "nil"),
-                    ]
+                    var userInfo: [String: String] = [:]
+                    if (response as! HTTPURLResponse).statusCode >= 500 {
+                        userInfo = [
+                            NSLocalizedDescriptionKey: NSLocalizedString("Oops... Something went wrong", comment: ""),
+                            NSLocalizedFailureReasonErrorKey: String(format: NSLocalizedString("Expected access token, got: %@.", comment: ""), NSString(data: data!, encoding: String.Encoding.utf8.rawValue) ?? "nil"),
+                        ]
+                    } else {
+                        userInfo = [
+                            NSLocalizedDescriptionKey: NSLocalizedString("Could not authorize user. Please check email and/or password and try again", comment: ""),
+                            NSLocalizedFailureReasonErrorKey: String(format: NSLocalizedString("Expected access token, got: %@.", comment: ""), NSString(data: data!, encoding: String.Encoding.utf8.rawValue) ?? "nil"),
+                        ]
+                    }
 
                     let error = NSError(domain: HeimdallrErrorDomain, code: HeimdallrErrorInvalidData, userInfo: userInfo)
                     completion(.failure(error))
@@ -160,10 +168,18 @@ public let HeimdallrErrorNotAuthorized = 2
                 if let data = data, let error = OAuthError.decode(data: data) {
                     completion(.failure(error.nsError))
                 } else {
-                    let userInfo = [
-                        NSLocalizedDescriptionKey: NSLocalizedString("Could not authorize grant", comment: ""),
-                        NSLocalizedFailureReasonErrorKey: String(format: NSLocalizedString("Expected error, got: %@.", comment: ""), NSString(data: data!, encoding: String.Encoding.utf8.rawValue) ?? "nil"),
-                    ]
+                    var userInfo: [String: String] = [:]
+                    if (response as! HTTPURLResponse).statusCode >= 500 {
+                        userInfo = [
+                            NSLocalizedDescriptionKey: NSLocalizedString("Oops... Something went wrong", comment: ""),
+                            NSLocalizedFailureReasonErrorKey: String(format: NSLocalizedString("Expected access token, got: %@.", comment: ""), NSString(data: data!, encoding: String.Encoding.utf8.rawValue) ?? "nil"),
+                        ]
+                    } else {
+                        userInfo = [
+                            NSLocalizedDescriptionKey: NSLocalizedString("Could not authorize user. Please check email and/or password and try again", comment: ""),
+                            NSLocalizedFailureReasonErrorKey: String(format: NSLocalizedString("Expected access token, got: %@.", comment: ""), NSString(data: data!, encoding: String.Encoding.utf8.rawValue) ?? "nil"),
+                        ]
+                    }
 
                     let error = NSError(domain: HeimdallrErrorDomain, code: HeimdallrErrorInvalidData, userInfo: userInfo)
                     completion(.failure(error))
